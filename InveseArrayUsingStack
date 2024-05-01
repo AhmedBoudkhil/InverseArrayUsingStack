@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct stack{
+    int data;
+    struct stack *link;
+}stack;
+
+stack *head = NULL;
+
+stack* createStackNode(int data) {
+    stack *newNode = (stack *)malloc(sizeof(stack));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = data;
+    newNode->link = NULL;
+    return newNode;
+}
+
+stack* inverseTable(int arr[], int size) {
+    for(int i = 0; i < size; i++) {
+        stack *newNode = createStackNode(arr[i]);
+        newNode->link = head;
+        head = newNode;
+    }
+    return head;
+}
+
+void printStack(stack *head) {
+    stack *node = head;
+    while(node != NULL) {
+        printf("%d ", node->data);
+        node = node->link;
+    }
+    printf("\n");
+}
+
+void freeStack(stack *head) {
+    stack *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->link;
+        free(temp);
+    }
+}
+
+int main() {
+    int arr[] = {3, 41, 23, 43, 25, 42, 66};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    stack *stackHead = inverseTable(arr, size);
+    printStack(stackHead);
+    freeStack(stackHead);
+    
+    return 0;
+}
